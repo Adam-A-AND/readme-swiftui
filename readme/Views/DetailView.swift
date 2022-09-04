@@ -1,71 +1,64 @@
-//
-//  DetailView.swift
-//  readme
-//
-//  Created by Adam Armstrong on 26/08/2022.
-//
+/// Copyright (c) 2021 Razeware LLC
+///
+/// Permission is hereby granted, free of charge, to any person obtaining a copy
+/// of this software and associated documentation files (the "Software"), to deal
+/// in the Software without restriction, including without limitation the rights
+/// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+/// copies of the Software, and to permit persons to whom the Software is
+/// furnished to do so, subject to the following conditions:
+///
+/// The above copyright notice and this permission notice shall be included in
+/// all copies or substantial portions of the Software.
+///
+/// Notwithstanding the foregoing, you may not use, copy, modify, merge, publish,
+/// distribute, sublicense, create a derivative work, and/or sell copies of the
+/// Software in any work that is designed, intended, or marketed for pedagogical or
+/// instructional purposes related to programming, coding, application development,
+/// or information technology.  Permission for such use, copying, modification,
+/// merger, publication, distribution, sublicensing, creation of derivative works,
+/// or sale is expressly withheld.
+///
+/// This project and source code may use libraries or frameworks that are
+/// released under various Open-Source licenses. Use of those libraries and
+/// frameworks are governed by their own individual licenses.
+///
+/// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+/// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+/// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+/// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+/// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+/// THE SOFTWARE.
 
 import SwiftUI
-import class PhotosUI.PHPickerViewController
 
 struct DetailView: View {
-    @Binding var image: Image?
-    @State var imagePickerIsShowing = false
-    @State var deleteImageDialogIsShowing = false
-    @ObservedObject var book: Book
-    
-    var body: some View {
-        VStack (alignment: .leading) {
-            HStack (spacing: 16) {
-                Button(action: {
-                    book.readMe.toggle()
-                }, label: {
-                    Image(systemName: book.readMe ? "bookmark.fill" : "bookmark")
-                })
-                TitleAndAuthorView(book: book, titleFont: .title, authorFont: .title2)
-            }
-            
-            VStack {
-                Divider()
-                    .padding(.vertical)
-                TextField("Review...", text: $book.microReview)
-                Divider()
-                    .padding(.vertical)
-                Book.Image(image: image, title: book.title, cornerRadius: 16.0)
-                    .scaledToFit()
-                HStack {
-                    if (image != nil) {
-                        Spacer()
-                        Button("Delete Image") {
-                            deleteImageDialogIsShowing = true
-                        }
-                    }
-                    Spacer()
-                    Button("Update Image...") {
-                        imagePickerIsShowing = true
-                    }
-                    Spacer()
-                }
-                .padding()
-            }
-            .padding()
-            Spacer()
+  @ObservedObject var book: Book
+  @EnvironmentObject var library: Library
+  
+  var body: some View {
+    VStack(alignment: .leading) {
+      HStack(spacing: 16) {
+        Button {
+          book.readMe.toggle()
+        } label: {
+          Image(systemName: book.readMe ? "bookmark.fill" : "bookmark")
+            .font(.system(size: 48, weight: .light))
         }
-        .padding()
-        .sheet(isPresented: $imagePickerIsShowing) {
-            PHPickerViewController.View(image: $image)
-        }
-        .confirmationDialog("Delete image for \(book.title)", isPresented: $deleteImageDialogIsShowing) {
-            Button("Delete", role: .destructive) {image = nil }
-        } message: {
-            Text("Delete image for \(book.title)?")
-        }
+        TitleAndAuthorStack(book: book, titleFont: .title, authorFont: .title2)
+      }
+      ReviewAndImageStack(book: book, image: $library.images[book])
     }
+    .padding()
+  }
 }
 
 struct DetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        DetailView(image: .constant(nil), book: .init())
-            .previewedInAllColorSchemes
-    }
+  static var previews: some View {
+    DetailView(book: .init())
+      .environmentObject(Library())
+      .previewedInAllColorSchemes
+  }
 }
+
+
