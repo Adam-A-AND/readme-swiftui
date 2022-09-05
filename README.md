@@ -4,17 +4,17 @@ This is a simple app for keeping track of books & whether they've been read or n
 # Focus
 The main focus of this app is to demonstrate the following competencies:
 
-Swift
-The SwiftUI Framework
-State & Bindings
-Using Lists
-Modal presentation and navigation
-Using SFSymbols
-Using Observable Objects
-Environments & Environment Variables
-Swipe Actions
-Using ForEach
-Extensions
+* Swift
+* The SwiftUI Framework
+* State & Bindings
+* Using Lists
+* Modal presentation and navigation
+* Using SFSymbols
+* Using Observable Objects
+* Environments & Environment Variables
+* Swipe Actions
+* Using ForEach
+* Extensions
 
 # Running The Application
 The app was created with XCode. In order to run the application, open the ReadMe.xcodeproj in Xcode. Once this has loaded, you should be able to build & run the application using the play button in the top toolbar of the Xcode window. Make sure you have selected an appropriate device before building the app to have this open in the simulator.
